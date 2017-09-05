@@ -6,6 +6,6 @@ defmodule ProblemB.Application do
   use Application
 
   def start(_type, _args) do
-    Supervisor.start_link([TaskSupervisor, Server], [strategy: :one_for_one])
+    Supervisor.start_link([Server, TaskSupervisor], [strategy: :one_for_all])
   end
 end
