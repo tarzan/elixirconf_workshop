@@ -9,7 +9,7 @@ defmodule ProblemH do
   Start the GenServers.
   """
   def start_link() do
-    strategy = :one_for_one
+    strategy = :one_for_all
 
 
     ## Do not change code below
