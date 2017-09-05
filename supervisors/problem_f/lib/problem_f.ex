@@ -9,14 +9,14 @@ defmodule ProblemF do
   Start an Agent to hold account balance and GenServer that updates it.
   """
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+    Supervisor.start_link(__MODULE__, nil)
   end
 
   @doc false
   def init(_) do
-    {:ok, _} = Logger.start_link()
-    {:ok, _} = Server.start_link()
-    {:ok, nil}
+    Supervisor.init([{Logger, []},
+                     {Server, []}],
+                    [strategy: :one_for_one])
   end
 
   ## Do not change code below
