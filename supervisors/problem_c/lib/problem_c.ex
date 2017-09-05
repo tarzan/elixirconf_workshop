@@ -10,13 +10,10 @@ defmodule ProblemC do
   """
 
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
-  end
-
-  def init(_) do
-    {:ok, _} = Person.start_link(:alice)
-    {:ok, _} = Person.start_link(:bob)
-    {:ok, nil}
+    Supervisor.start_link([
+      {Person, :alice},
+      {Person, :bob}
+    ], [strategy: :one_for_one, restarts: :infinity])
   end
 
   ## Do not change code below
