@@ -16,7 +16,10 @@ defmodule ProblemB do
   Fetch a value from the server.
   """
   def fetch!(server, key) do
-    GenServer.call(server, :fetch!, key)
+    case GenServer.call(server, {:fetch!, key}) do
+      {:ok, value} -> value
+      {:error, exception} -> raise exception
+    end
   end
 
   @doc false
@@ -26,6 +29,18 @@ defmodule ProblemB do
 
   @doc false
   def handle_call({:fetch!, key}, _, state) do
-    {:reply, Map.fetch!(state, key), state}
+    {:reply, fetch(state, key), state}
+  end
+
+  defp fetch(state, key) do
+    try do
+      Map.fetch! state, key
+    rescue
+      exception in [KeyError] ->
+        {:error, exception}
+    else
+      value ->
+        {:ok, value}
+    end
   end
 end
