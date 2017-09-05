@@ -8,6 +8,13 @@ defmodule ProblemC do
   call `{:stop, reason}`. GenServer should reply with message `:ok`.
   """
   def stop(gen_server) do
+    process = GenServer.whereis(gen_server)
+    monitor = Process.monitor(process)
+
     GenServer.call(gen_server, {:stop, :normal}, :infinity)
+
+    receive do
+      {:DOWN, ^monitor, :process, _pid, _reason} -> :ok
+    end
   end
 end
