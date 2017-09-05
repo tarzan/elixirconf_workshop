@@ -1,6 +1,10 @@
 defmodule ProblemA do
   @moduledoc """
-  ProblemA.
+  By default, when a process reaches its end, it exits with :normal. To handle non-normal exits, pass any term
+  to exit/1 like exit(:stop) in the question.
+
+  Note that if the reason is anything other than :normal, all the processes linked to the process that exited will
+  also crash, unless they're trapping exits.
   """
 
   @doc """
@@ -10,8 +14,7 @@ defmodule ProblemA do
     Task.start_link(fn() ->
       receive do
         :stop ->
-          # Only change code below
-          exit(:stop)
+          exit(:normal)
       end
     end)
   end

@@ -1,6 +1,8 @@
 defmodule ProblemF do
   @moduledoc """
-  ProblemF.
+  Add a Supervisor with :one_for_one strategy because the processes' states are independent of each other.
+  The Logger doesn't get in a bad state if the GenServer crashes and vice versa. While the GenServer casts to the Logger,
+  we don't want to crash the GenServer if the Logger crashes as we are OK with losing logs.
   """
 
   alias __MODULE__.{Logger, Server}
@@ -9,14 +11,12 @@ defmodule ProblemF do
   Start an Agent to hold account balance and GenServer that updates it.
   """
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+    Supervisor.start_link(__MODULE__, nil)
   end
 
   @doc false
   def init(_) do
-    {:ok, _} = Logger.start_link()
-    {:ok, _} = Server.start_link()
-    {:ok, nil}
+    Supervisor.init([Logger, Server], [strategy: :one_for_one])
   end
 
   ## Do not change code below

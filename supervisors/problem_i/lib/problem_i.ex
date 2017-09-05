@@ -1,6 +1,8 @@
 defmodule ProblemI do
   @moduledoc """
-  ProblemI.
+  We increased the `max_restarts` because a crash of one crashes another.
+  In the real world, we'd change the strategy to :one_for_all as this gets us into a good
+  state with fewer crashes.
   """
 
   alias __MODULE__.{Server, Client}
@@ -9,7 +11,7 @@ defmodule ProblemI do
   Start the GenServers.
   """
   def start_link() do
-    max_restarts = 1
+    max_restarts = 2
 
     ## Do not change code below
 

@@ -1,9 +1,9 @@
 defmodule ProblemD do
   @moduledoc """
-  use Genserver to fetch random number at a specific from random.org and print the number.
-  For failure, handle two cases:
-    if the request times out, print "request timeout"
-    if there's a legitimate error, print "request error"
+  This is a real world example of handling success and failure for external resource fetching. In this case all you
+  need to do is pattern mactch on resp and print out the result if it's a success or return "request timeout" if it's an error.
+  The return value of handle_info/2 can be a 2- or 3-tuple. In this case, it's a 2-tuple because we haven't implemented
+  the callback.
   """
   use GenServer
 
@@ -25,9 +25,11 @@ defmodule ProblemD do
   # only change code below
   @doc false
   def handle_info(:get, timeout) do
-    resp = HTTPoison.get(@random, [], [recv_timeout: timeout])
-    # handle success and failure
-    IO.inspect resp
+    case HTTPoison.get(@random, [], [recv_timeout: timeout]) do
+      {:error, _resp} -> "request timeout"
+      {:ok, resp}     -> resp.body
+    end
+    |> IO.inspect
     {:noreply, timeout}
   end
 end

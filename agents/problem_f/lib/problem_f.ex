@@ -1,6 +1,7 @@
 defmodule ProblemF do
   @moduledoc """
-  ProblemF
+  In this problem, we need to first find the pid of the GenServer so we monitor and cast to the same process. The monitor ensures we know if the GenServer crashes before we receive a response. When using this
+  technique, we will need to manually demonitor (with flush) so we don't leak the monitor.
   """
   use GenServer
 
@@ -8,8 +9,9 @@ defmodule ProblemF do
   Pulls a value off
   """
   def pop() do
-    ref = make_ref()
-    GenServer.cast(__MODULE__, {:pop, self(), ref})
+    pid = GenServer.whereis(__MODULE__)
+    ref = Process.monitor(pid)
+    GenServer.cast(pid, {:pop, self(), ref})
     ref
   end
 

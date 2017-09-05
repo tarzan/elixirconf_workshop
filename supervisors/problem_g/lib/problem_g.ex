@@ -1,6 +1,6 @@
 defmodule ProblemG do
   @moduledoc """
-  ProblemG.
+  The Client depends on the Server so the relationship is :rest_for_one with the Server started before the Client.
   """
 
   alias __MODULE__.{Server, Client}
@@ -9,7 +9,7 @@ defmodule ProblemG do
   Start the GenServers.
   """
   def start_link() do
-    strategy = :one_for_one
+    strategy = :rest_for_one
 
     ## Do not change code below
 

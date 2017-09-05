@@ -1,6 +1,6 @@
 defmodule ProblemJ do
   @moduledoc """
-  ProblemJ.
+  :one_for_all is used because there's a circular dependency including all three processes.
   """
 
   alias __MODULE__.{Alice, Bob, Carol}
@@ -9,7 +9,9 @@ defmodule ProblemJ do
   Start the GenServers.
   """
   def start_link() do
-    strategy = :one_for_one
+    strategy = :one_for_all
+
+    ## Do not change code below
 
     Supervisor.start_link([Alice, Bob, Carol], [strategy: strategy, max_restarts: 1])
   end

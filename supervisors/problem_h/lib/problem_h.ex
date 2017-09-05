@@ -1,6 +1,7 @@
 defmodule ProblemH do
   @moduledoc """
-  ProblemH.
+  :one_for_all strategy is used because Client and Server are dependent on each and will get in a bad state
+  if the other crashes.
   """
 
   alias __MODULE__.{Server, Client}
@@ -9,8 +10,7 @@ defmodule ProblemH do
   Start the GenServers.
   """
   def start_link() do
-    strategy = :one_for_one
-
+    strategy = :one_for_all
 
     ## Do not change code below
 

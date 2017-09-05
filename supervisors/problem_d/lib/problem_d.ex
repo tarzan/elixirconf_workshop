@@ -1,6 +1,6 @@
 defmodule ProblemD do
   @moduledoc """
-  ProblemD.
+  Change the strategy to :one_for_all because Alice and Bob are intrinsically linked together.
   """
 
   alias __MODULE__.{Alice, Bob}
@@ -9,7 +9,7 @@ defmodule ProblemD do
   Start the Agents.
   """
   def start_link() do
-    strategy = :one_for_one
+    strategy = :one_for_all
 
     ## Do not change code below
 

@@ -1,6 +1,7 @@
 defmodule ProblemC do
   @moduledoc """
-  ProblemC.
+  The solution is the same as the last problem. We change GenServer to Supervisor and then set up Alice and Bob as children
+  of that Supervisor. Always and forever in this case means :one_for_one since if one crashes we only want to restart that one.
   """
 
   alias __MODULE__.Person
@@ -10,13 +11,11 @@ defmodule ProblemC do
   """
 
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+    Supervisor.start_link(__MODULE__, nil)
   end
 
   def init(_) do
-    {:ok, _} = Person.start_link(:alice)
-    {:ok, _} = Person.start_link(:bob)
-    {:ok, nil}
+    Supervisor.init([{Person, :bob}, {Person, :alice}], [strategy: :one_for_one])
   end
 
   ## Do not change code below

@@ -1,6 +1,6 @@
 defmodule ProblemB do
   @moduledoc """
-  ProblemB.
+  First, change GenServer to Supervisor and then set up the init/2 function to set up the workers - State and Server - and strategy - :one_for_one.
   """
 
   alias __MODULE__.{State, Server}
@@ -9,14 +9,12 @@ defmodule ProblemB do
   Start an Agent to hold account balance and GenServer that updates it.
   """
   def start_link() do
-    GenServer.start_link(__MODULE__, nil)
+    Supervisor.start_link(__MODULE__, nil)
   end
 
   @doc false
-  def init(_) do
-    {:ok, _} = State.start_link()
-    {:ok, _} = Server.start_link()
-    {:ok, nil}
+  def init(nil) do
+    Supervisor.init([State, Server], [strategy: :one_for_one])
   end
 
   ## Do not change code below
