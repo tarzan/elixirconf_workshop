@@ -15,12 +15,33 @@ defmodule ProblemG do
   @doc """
   Call task.
   """
-  def call(task, request, timeout)
+  def call(task, request, timeout) do
+    pid = GenServer.whereis(task)
+    ref = Process.monitor(pid)
+
+    send(pid, {__MODULE__, {self(), ref}, request})
+
+    receive do
+      {^ref, result} ->
+        Process.demonitor(ref, [:flush])
+        result
+      {:DOWN, ^ref, _, _, :noconnect} ->
+        reason = {:nodedown, node(pid)}
+        exit({reason, {__MODULE__, :call, [task, request, timeout]}})
+      {:DOWN, ^ref, _, _, reason} ->
+        exit({reason, {__MODULE__}})
+      after
+        timeout ->
+          Process.demonitor(ref, [:flush])
+          exit({:timeout, {__MODULE__, :call, [task, request, timeout]}})
+    end
+  end
 
   @doc """
   Reply to call
   """
-  def reply(from, response)
+  def reply({pid, ref}, response), do: send(pid, {ref, response})
+
 
   @doc false
   def loop() do
