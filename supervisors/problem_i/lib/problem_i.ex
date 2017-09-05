@@ -9,7 +9,7 @@ defmodule ProblemI do
   Start the GenServers.
   """
   def start_link() do
-    max_restarts = 1
+    max_restarts = 2
 
     ## Do not change code below
 
