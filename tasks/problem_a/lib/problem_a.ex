@@ -11,7 +11,7 @@ defmodule ProblemA do
       receive do
         :stop ->
           # Only change code below
-          exit(:stop)
+          exit(:normal)
       end
     end)
   end
